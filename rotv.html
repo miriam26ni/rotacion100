@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rotacion 100 - Video con Notas Públicas</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --card: #1e1e1e;
+      --text: #eee;
+      --accent: #d4af37;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+    }
+    .video-section {
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+      height: 0;
+      overflow: hidden;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .video-info {
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .video-info h1 {
+      font-size: 2rem;
+      color: var(--accent);
+    }
+    .back-btn {
+      background: var(--accent);
+      color: #000;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .back-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(212,175,55,0.4);
+    }
+    .video-info p {
+      margin-top: 10px;
+      opacity: 0.9;
+      grid-column: 1 / -1;
+    }
+    .notes-section {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .notes-section h2 {
+      font-size: 1.6rem;
+      margin-bottom: 15px;
+      color: var(--accent);
+    }
+    .notes-display {
+      width: 100%;
+      min-height: 300px;
+      background: #2a2a2a;
+      border: none;
+      border-radius: 8px;
+      padding: 15px;
+      color: var(--text);
+      font-size: 1rem;
+      white-space: pre-wrap;
+      line-height: 1.8;
+      overflow-y: auto;
+    }
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; }
+      .notes-section { position: static; }
+      .video-info { flex-direction: column; align-items: flex-start; }
+      .back-btn { margin-top: 15px; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Sección del Video (YouTube incrustado) -->
+    <div class="video-section">
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/QxqiQMvCado" 
+                title="Rotacion 100 - Scarma" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+        </iframe>
+      </div>
+      <div class="video-info">
+        <div>
+          <h1>Recibi tu bono de $100 dentro o fuera de EE.UU.</h1>
+          <p>Video explicativo del proyecto comunitario.</p>
+        </div>
+        <!-- BOTÓN PARA VOLVER A LA PÁGINA PRINCIPAL -->
+        <a href="https://rotacion100-three.vercel.app" class="back-btn">← Volver a la Página Principal</a>
+        <!-- Cambia el href por tu página principal si es necesario -->
+      </div>
+    </div>
+
+    <!-- Sección de Notas Públicas (solo lectura) -->
+    <div class="notes-section">
+      <h2>Notas del Video</h2>
+      <div class="notes-display" id="publicNotes">
+        <!-- EDITA ESTAS NOTAS AQUÍ (tú como administrador) -->
+        Resumen del proyecto Rotacion 100:
+
+        • Cada participante contribuye con $10 comprando una imagen digital descargable.   https://b100art.digital
+        • Al pagar y dejar tu email, entras en una lista comunitaria.
+        • Cuando llegas a la posición 100, el sistema te envía un email automáticamente para solicitar tus datos y enviarte el bono de $100 (o más si contribuyes      múltiples veces).
+        • Es un sistema voluntario basado en donaciones.
+        • Máximo 500 participantes.
+         Si realizaste tu contribucion de $10 a traves de paypal, cash.app u otro metodo que no sea debito ó credito debes enviar captura de pantalla del pago ademas  de tu identificicaion a bbateria2026@gmail.com
+
+        • Pagos de bonos vía PayPal, CASP o Western Union (aún no 100% automatizado).
+
+        ¡Únete y forma parte de esta rotación comunitaria!
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
