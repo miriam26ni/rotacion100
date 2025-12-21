@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rotación 100</title>
+  <title>Panel de Anuncios - Rotación 100</title>
   <style>
     body {
       margin: 0;
-      overflow: hidden;
       background: linear-gradient(to bottom, #000814 0%, #001d3d 100%);
       height: 100vh;
       font-family: Arial, sans-serif;
       color: white;
+      overflow: hidden;
     }
     canvas {
       position: fixed;
@@ -19,410 +19,234 @@
       width: 100vw; height: 100vh;
       z-index: -1;
     }
-    .header {
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
       text-align: center;
-      padding: 20px 0 10px;
       position: relative;
       z-index: 2;
     }
-    .header h1 {
-      margin: 0 0 20px;
-      font-size: 28px;
-      text-shadow: 0 0 15px #c8ff64;
-    }
-    .buttons-container {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      align-items: center;
-      padding: 0 10px;
-    }
-    .btn {
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      text-decoration: none;
-      color: white;
-      border-radius: 50px;
-      transition: all 0.4s ease;
-      box-shadow: 0 0 15px rgba(200, 255, 100, 0.4);
-      position: relative;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-      white-space: nowrap;
-      cursor: pointer;
-    }
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      transition: left 0.6s;
-    }
-    .btn:hover::before {
-      left: 100%;
-    }
-    .btn-reglamento {
-      background: rgba(100, 150, 255, 0.4);
-      border: 2px solid #6496ff;
-    }
-    .btn-reglamento:hover {
-      background: rgba(100, 150, 255, 0.7);
-      box-shadow: 0 0 25px #6496ff;
-      transform: translateY(-3px);
-    }
-    .btn-inscribirse {
-      background: rgba(50, 200, 100, 0.4);
-      border: 2px solid #32c864;
-    }
-    .btn-inscribirse:hover {
-      background: rgba(50, 200, 100, 0.7);
-      box-shadow: 0 0 30px #32c864;
-      transform: translateY(-3px);
-    }
-    .btn-contacto {
-      background: rgba(200, 100, 255, 0.4);
-      border: 2px solid #c864ff;
-    }
-    .btn-contacto:hover {
-      background: rgba(200, 100, 255, 0.7);
-      box-shadow: 0 0 25px #c864ff;
-      transform: translateY(-3px);
-    }
-    /* Dropdown de Métodos de Pago */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-    .dropdown-btn {
-      background: rgba(255, 215, 0, 0.4);
-      border: 2px solid #ffd700;
-      padding: 12px 24px;
-      font-size: 16px;
-    }
-    .dropdown-btn:hover {
-      background: rgba(255, 215, 0, 0.7);
-      box-shadow: 0 0 30px #ffd700;
-      transform: translateY(-3px);
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: rgba(0, 0, 20, 0.9);
-      min-width: 280px;
-      box-shadow: 0 0 25px rgba(200, 255, 100, 0.5);
-      border-radius: 15px;
-      z-index: 10;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 15px;
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(200, 255, 100, 0.4);
-    }
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-    .payment-option {
-      display: flex;
-      align-items: center;
-      padding: 12px;
-      margin: 8px 0;
-      background-color: rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      transition: all 0.3s ease;
-    }
-    .payment-option:hover {
-      background-color: rgba(200, 255, 100, 0.25);
-      transform: translateX(8px);
-      box-shadow: 0 0 15px rgba(200, 255, 100, 0.4);
-    }
-    .payment-icon {
+    h1 {
       font-size: 32px;
-      margin-right: 15px;
+      text-shadow: 0 0 15px #c8ff64;
+      margin-bottom: 30px;
     }
-    .payment-text {
-      font-size: 15px;
-      line-height: 1.4;
-    }
-    .payment-text strong {
-      color: #c8ff64;
-    }
-    .payment-link {
-      color: #c8ff64;
-      text-decoration: underline;
-      font-weight: bold;
-    }
-
-    .main-container {
-      padding: 20px 15px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .lista-section {
-      background-color: rgba(0, 0, 20, 0.6);
-      border-radius: 15px;
+    .announcement-box {
+      background: rgba(0, 20, 40, 0.8);
+      border: 2px solid #32c864;
+      border-radius: 20px;
       padding: 30px;
-      box-shadow: 0 0 20px rgba(0, 255, 100, 0.2);
-      overflow-y: auto;
-      max-height: calc(100vh - 200px);
-    }
-    .item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 18px;
+      min-height: 400px;
+      box-shadow: 0 0 30px rgba(50, 200, 100, 0.4);
+      text-align: left;
       font-size: 18px;
+      line-height: 1.8;
+      position: relative;
     }
-    .circulo {
-      background-color: purple;
-      color: white;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 20px;
-      flex-shrink: 0;
+    .announcement-box p {
+      margin: 0;
+      white-space: pre-wrap; /* Permite saltos de línea */
+    }
+    .edit-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(50, 200, 100, 0.7);
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
       font-weight: bold;
-      font-size: 16px;
-      box-shadow: 0 0 15px rgba(128, 0, 128, 0.8);
+      display: none; /* Se muestra solo después de guardar una vez */
     }
-
-    /* Modal para la tabla de bonos */
-    .modal {
+    .edit-modal {
       display: none;
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
-      z-index: 100;
-      align-items: center;
+      background: rgba(0,0,0,0.95);
+      z-index: 1000;
       justify-content: center;
-      backdrop-filter: blur(5px);
+      align-items: center;
     }
-    .modal.open {
+    .edit-modal.open {
       display: flex;
     }
-    .modal-content {
-      background-color: rgba(10, 10, 30, 0.95);
-      border-radius: 15px;
+    .edit-panel {
+      background: rgba(0, 20, 40, 0.98);
       padding: 30px;
-      max-width: 90%;
-      max-height: 90%;
-      overflow-y: auto;
-      box-shadow: 0 0 30px rgba(200, 255, 100, 0.4);
-      border: 1px solid rgba(200, 255, 100, 0.3);
+      border-radius: 20px;
+      width: 90%;
+      max-width: 700px;
+      border: 2px solid #c8ff64;
+      box-shadow: 0 0 40px rgba(200, 255, 100, 0.5);
     }
-    .modal-content h2 {
+    .edit-panel h2 {
       text-align: center;
-      margin-bottom: 25px;
-      text-shadow: 0 0 8px #c8ff64;
-      font-size: 24px;
-    }
-    .close-modal {
-      position: absolute;
-      top: 15px;
-      right: 25px;
-      font-size: 32px;
-      cursor: pointer;
       color: #c8ff64;
+      margin-bottom: 20px;
     }
-    table {
+    textarea {
       width: 100%;
-      border-collapse: collapse;
-      font-size: 17px;
+      height: 400px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: 1px solid #c8ff64;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 18px;
+      font-family: Arial, sans-serif;
+      resize: vertical;
     }
-    th, td {
-      padding: 12px 10px;
-      text-align: left;
-      border-bottom: 1px solid rgba(200, 255, 100, 0.3);
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 15px 0;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid #c8ff64;
+      color: white;
+      border-radius: 10px;
+      font-size: 16px;
     }
-    th {
-      background-color: rgba(128, 0, 128, 0.3);
+    .buttons {
       text-align: center;
+      margin-top: 20px;
     }
-    td:last-child {
-      text-align: right;
+    button {
+      padding: 12px 25px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 10px;
       font-weight: bold;
-      color: #c8ff64;
+      cursor: pointer;
     }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .header h1 { font-size: 24px; }
-      .buttons-container { gap: 10px; }
-      .btn, .dropdown-btn { padding: 10px 18px; font-size: 15px; }
-      .item { font-size: 16px; margin-bottom: 14px; }
-      .circulo { width: 40px; height: 40px; font-size: 15px; margin-right: 15px; }
-      table { font-size: 15px; }
-      th, td { padding: 10px 8px; }
+    #saveBtn {
+      background: #32c864;
+      color: white;
+    }
+    #cancelBtn {
+      background: #666;
+      color: white;
     }
   </style>
 </head>
 <body>
   <canvas id="fireflies"></canvas>
+  
+  <div class="container">
+    <h1>Panel de Anuncios - Rotación 100</h1>
+    
+    <div class="announcement-box">
+      <div id="editBtn" class="edit-btn">   Hola! con el Objetivo de evitar saturaciones por favor hagan sus pagos de 8 a 12, el resto de la tarde lo dejo para realizar pagos   Editar</div>
+      <p id="displayText">¡Bienvenido!</p>
+    </div>
+  </div>
 
-  <div class="header">
-    <h1>Rotación 100</h1>
-   
-    <div class="buttons-container">
-      <button id="openModal" class="btn btn-reglamento">Bonos</button>
-      <a href="#" class="btn btn-inscribirse">Inscribirse Ahora</a>
-      <a href="#" class="btn btn-contacto">Contacto</a>
-     
-      <div class="dropdown">
-        <div class="btn dropdown-btn">💳 Métodos de Pago</div>
-        <div class="dropdown-content">
-          <div class="payment-option">
-            <span class="payment-icon">💳</span>
-            <div class="payment-text"><strong>Tarjeta de Crédito/Débito</strong><br>Visa, Mastercard, American Express</div>
-          </div>
-          <div class="payment-option">
-            <span class="payment-icon">🏦</span>
-            <div class="payment-text"><strong>Transferencia Bancaria</strong><br>Depósitos directos</div>
-          </div>
-          <div class="payment-option">
-            <span class="payment-icon">💰</span>
-            <div class="payment-text"><strong>Efectivo</strong><br>Pago en persona</div>
-          </div>
-          <div class="payment-option">
-            <span class="payment-icon">📱</span>
-            <div class="payment-text"><strong>PayPal</strong><br>
-              <a href="https://paypal.me/miriam2023ni" target="_blank" class="payment-link">paypal.me/miriam2023ni</a>
-            </div>
-          </div>
-          <div class="payment-option">
-            <span class="payment-icon">💵</span>
-            <div class="payment-text"><strong>Cash App</strong><br>
-              <a href="https://cash.app/$Exito2026" target="_blank" class="payment-link">cash.app/$Exito2026</a>
-            </div>
-          </div>
-          <div class="payment-option">
-            <span class="payment-icon">📲</span>
-            <div class="payment-text"><strong>Zelle</strong><br>Transferencias instantáneas con email o teléfono</div>
-          </div>
-          <div class="payment-option">
-            <span class="payment-icon">₿</span>
-            <div class="payment-text"><strong>Criptomonedas</strong><br>Bitcoin, Ethereum</div>
-          </div>
-          <div class="payment-option">
-            <span class="payment-icon"></span>
-            <div class="payment-text"><strong>Apple Pay / Google Pay</strong><br>Pago móvil seguro</div>
-          </div>
-        </div>
+  <!-- Modal de edición -->
+  <div id="editModal" class="edit-modal">
+    <div class="edit-panel">
+      <h2>Editar Anuncio (Solo Administrador)</h2>
+      <input type="password" id="passwordInput" placeholder="Ingresa la contraseña">
+      <textarea id="textInput">¡Bienvenido! Aquí aparecerán tus anuncios y actualizaciones en vivo.</textarea>
+      <div class="buttons">
+        <button id="saveBtn">Guardar Cambios</button>
+        <button id="cancelBtn">Cancelar</button>
       </div>
     </div>
   </div>
 
-  <div class="main-container">
-  <div class="lista-section">
-<div class="item"><div class="circulo">100</div>Indira Rubenia Calero Sandoval</div>
-<div class="item"><div class="circulo">99</div>Indira Rubenia Calero Sandoval</div>
-<div class="item"><div class="circulo">98</div>David Norori</div>
-<div class="item"><div class="circulo">97</div>David Norori</div>
-<div class="item"><div class="circulo">96</div>David Norori</div>
-<div class="item"><div class="circulo">95</div>David Norori</div>
-<div class="item"><div class="circulo">94</div>David Norori</div>
-<div class="item"><div class="circulo">93</div>David Norori</div>
-<div class="item"><div class="circulo">92</div>David Norori</div>
-<div class="item"><div class="circulo">91</div>David Norori</div>
-<div class="item"><div class="circulo">90</div>David Norori</div>
-<div class="item"><div class="circulo">89</div>David Norori</div>
-<div class="item"><div class="circulo">88</div>David Norori</div>
-<div class="item"><div class="circulo">87</div>David Norori</div>
-<div class="item"><div class="circulo">86</div>David Norori</div>
-<div class="item"><div class="circulo">85</div>David Norori</div>
-<div class="item"><div class="circulo">84</div>David Norori</div>
-<div class="item"><div class="circulo">83</div>David Norori</div>
-<div class="item"><div class="circulo">82</div>David Norori</div>
-<div class="item"><div class="circulo">81</div>David Norori</div>
-<div class="item"><div class="circulo">80</div>David Norori</div>
-<div class="item"><div class="circulo">79</div>David Norori</div>
-<div class="item"><div class="circulo">78</div>David Norori</div>
-<div class="item"><div class="circulo">77</div>David Norori</div>
-<div class="item"><div class="circulo">76</div>David Norori</div>
-<div class="item"><div class="circulo">75</div>David Norori</div>
-<div class="item"><div class="circulo">74</div>David Norori</div>
-<div class="item"><div class="circulo">73</div>David Norori</div>
-<div class="item"><div class="circulo">72</div>David Norori</div>
-<div class="item"><div class="circulo">71</div>David Norori</div>
-<div class="item"><div class="circulo">70</div>David Norori</div>
-<div class="item"><div class="circulo">69</div>David Norori</div>
-<div class="item"><div class="circulo">68</div>David Norori</div>
-<div class="item"><div class="circulo">67</div>David Norori</div>
-<div class="item"><div class="circulo">66</div>David Norori</div>
-<div class="item"><div class="circulo">65</div>David Norori</div>
-<div class="item"><div class="circulo">64</div>David Norori</div>
-<div class="item"><div class="circulo">63</div>David Norori</div>
-<div class="item"><div class="circulo">62</div>David Norori</div>
-<div class="item"><div class="circulo">61</div>David Norori</div>
-<div class="item"><div class="circulo">60</div>David Norori</div>
-<div class="item"><div class="circulo">59</div>David Norori</div>
-<div class="item"><div class="circulo">58</div>David Norori</div>
-<div class="item"><div class="circulo">57</div>David Norori</div>
-<div class="item"><div class="circulo">56</div>David Norori</div>
-<div class="item"><div class="circulo">55</div>Evelin Belinda Fernández Norori </div>
-<div class="item"><div class="circulo">54</div>Evelin Belinda Fernández Norori </div>
+  <script>
+    // Luciérnagas (efecto bonito de fondo)
+    const canvas = document.getElementById('fireflies');
+    const ctx = canvas.getContext('2d');
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    const fireflies = [];
+    for (let i = 0; i < 100; i++) {
+      fireflies.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 3 + 1,
+        speedX: (Math.random() - 0.5) * 0.6,
+        speedY: (Math.random() - 0.5) * 0.6,
+        opacity: Math.random() * 0.5 + 0.5
+      });
+    }
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fireflies.forEach(f => {
+        f.x += f.speedX;
+        f.y += f.speedY;
+        if (f.x < 0 || f.x > canvas.width) f.speedX *= -1;
+        if (f.y < 0 || f.y > canvas.height) f.speedY *= -1;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200, 255, 100, ${f.opacity})`;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = '#c8ff64';
+        ctx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+    window.addEventListener('resize', () => {
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    });
 
-<div class="item"><div class="circulo">53</div>Nelly Perez </div>
-<div class="item"><div class="circulo">52</div>Juan Soza</div>
-<div class="item"><div class="circulo">51</div>Juan Soza</div>
-<div class="item"><div class="circulo">50</div>Juan Soza </div>
-<div class="item"><div class="circulo">49</div>Juan Soza</div>
-<div class="item"><div class="circulo">48</div>Asarela Amisadai Fernandez Hernandez</div>
-<div class="item"><div class="circulo">47</div>Victor Morales</div>
-<div class="item"><div class="circulo">46</div>Leonardo Alfaro Carballo</div>
-<div class="item"><div class="circulo">45</div>Leonardo Alfaro Carballo</div>
-<div class="item"><div class="circulo">44</div>Leonardo Alfaro Carballo</div>
-<div class="item"><div class="circulo">43</div>Leonardo Alfaro Carballo</div>
-<div class="item"><div class="circulo">42</div>Leonardo Alfaro Carballo</div>
-<div class="item"><div class="circulo">41</div>Leonardo Alfaro Carballo</div>
-<div class="item"><div class="circulo">40</div>Leonardo Alfaro Carballo</div>
-<div class="item"><div class="circulo">39</div>Leonardo Alfaro Carballo</div>
-<div class="item"><div class="circulo">38</div>Leonardo Alfaro Carballo</div>
-<div class="item"><div class="circulo">37</div>Leonardo Alfaro Carballo</div>
-<div class="item"><div class="circulo">36</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">35</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">34</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">33</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">32</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">31</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">30</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">29</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">28</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">27</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">26</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">25</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">23</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">23</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">22</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">21</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">20</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">19</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">18</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">17</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">16</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">15</div>Jose Cordoba</div>
-<div class="item"><div class="circulo">14</div>Indira Rubenia Calero Sandoval</div>
-<div class="item"><div class="circulo">13</div>Indira Rubenia Calero Sandoval</div>
-<div class="item"><div class="circulo">12</div>Norma del Carmen Fernández Altamirano </div>
-<div class="item"><div class="circulo">11</div>Norma del Carmen Fernández Altamirano </div>
-<div class="item"><div class="circulo">10</div>Meylin Norori</div>
-<div class="item"><div class="circulo">9</div>Meylin Norori</div>
-<div class="item"><div class="circulo">8</div>Meylin Norori</div>
-<div class="item"><div class="circulo">7</div>Meylin Norori</div>
-<div class="item"><div class="circulo">6</div>Meylin Norori</div>
-<div class="item"><div class="circulo">5</div>Asarela Amisadai Fernandez Hernandez  </div>
-<div class="item"><div class="circulo">4</div>Dora Hernandez </div>
-<div class="item"><div class="circulo">3</div>Iris Aquino </div>
-<div class="item"><div class="circulo">2</div>Iris Aquino </div>
-<div class="item"><div class="circulo">1</div>Meylin Norori </div>
+    // Sistema de edición protegida
+    const PASSWORD = "admin2025"; // ← Cambia esta contraseña si quieres
+    const displayText = document.getElementById('displayText');
+    const textInput = document.getElementById('textInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const editBtn = document.getElementById('editBtn');
+    const editModal = document.getElementById('editModal');
+    const saveBtn = document.getElementById('saveBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
 
+    // Cargar texto guardado
+    const saved = localStorage.getItem('adminAnnouncement');
+    if (saved) {
+      displayText.innerHTML = saved.replace(/\n/g, '<br>');
+      editBtn.style.display = 'block';
+    }
 
+    // Abrir editor
+    editBtn.addEventListener('click', () => {
+      textInput.value = displayText.innerText;
+      editModal.classList.add('open');
+    });
+
+    // Guardar
+    saveBtn.addEventListener('click', () => {
+      if (passwordInput.value === PASSWORD) {
+        const newText = textInput.value.trim() || "Anuncio actualizado.";
+        displayText.innerHTML = newText.replace(/\n/g, '<br>');
+        localStorage.setItem('adminAnnouncement', newText);
+        editBtn.style.display = 'block';
+        editModal.classList.remove('open');
+        passwordInput.value = '';
+      } else {
+        alert("Contraseña incorrecta");
+      }
+    });
+
+    // Cancelar
+    cancelBtn.addEventListener('click', () => {
+      editModal.classList.remove('open');
+      passwordInput.value = '';
+    });
+
+    // Cerrar al hacer clic fuera
+    editModal.addEventListener('click', (e) => {
+      if (e.target === editModal) {
+        editModal.classList.remove('open');
+        passwordInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
 
 
 
@@ -535,6 +359,7 @@
 </body>
 
 </html>
+
 
 
 
