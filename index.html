@@ -1,364 +1,158 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel de Anuncios - Rotación 100</title>
-  <style>
-    body {
-      margin: 0;
-      background: linear-gradient(to bottom, #000814 0%, #001d3d 100%);
-      height: 100vh;
-      font-family: Arial, sans-serif;
-      color: white;
-      overflow: hidden;
-    }
-    canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: -1;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-    h1 {
-      font-size: 32px;
-      text-shadow: 0 0 15px #c8ff64;
-      margin-bottom: 30px;
-    }
-    .announcement-box {
-      background: rgba(0, 20, 40, 0.8);
-      border: 2px solid #32c864;
-      border-radius: 20px;
-      padding: 30px;
-      min-height: 400px;
-      box-shadow: 0 0 30px rgba(50, 200, 100, 0.4);
-      text-align: left;
-      font-size: 18px;
-      line-height: 1.8;
-      position: relative;
-    }
-    .announcement-box p {
-      margin: 0;
-      white-space: pre-wrap; /* Permite saltos de línea */
-    }
-    .edit-btn {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: rgba(50, 200, 100, 0.7);
-      padding: 10px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      display: none; /* Se muestra solo después de guardar una vez */
-    }
-    .edit-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.95);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    .edit-modal.open {
-      display: flex;
-    }
-    .edit-panel {
-      background: rgba(0, 20, 40, 0.98);
-      padding: 30px;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 700px;
-      border: 2px solid #c8ff64;
-      box-shadow: 0 0 40px rgba(200, 255, 100, 0.5);
-    }
-    .edit-panel h2 {
-      text-align: center;
-      color: #c8ff64;
-      margin-bottom: 20px;
-    }
-    textarea {
-      width: 100%;
-      height: 400px;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      border: 1px solid #c8ff64;
-      border-radius: 10px;
-      padding: 15px;
-      font-size: 18px;
-      font-family: Arial, sans-serif;
-      resize: vertical;
-    }
-    input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin: 15px 0;
-      background: rgba(0,0,0,0.6);
-      border: 1px solid #c8ff64;
-      color: white;
-      border-radius: 10px;
-      font-size: 16px;
-    }
-    .buttons {
-      text-align: center;
-      margin-top: 20px;
-    }
-    button {
-      padding: 12px 25px;
-      margin: 0 10px;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    #saveBtn {
-      background: #32c864;
-      color: white;
-    }
-    #cancelBtn {
-      background: #666;
-      color: white;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Próximos Pagos - Rotación 100</title>
+
+<style>
+body {
+  margin: 0;
+  background: linear-gradient(to bottom, #000814 0%, #001d3d 100%);
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  color: white;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+}
+
+h1 {
+  font-size: 32px;
+  text-shadow: 0 0 15px #c8ff64;
+  margin-bottom: 10px;
+}
+
+.table-title {
+  font-size: 26px;
+  font-weight: bold;
+  color: #c8ff64;
+  text-shadow: 0 0 10px #c8ff64;
+  margin-bottom: 20px;
+}
+
+/* TABLA */
+table {
+  width: 80%;
+  max-width: 900px;
+  border-collapse: collapse;
+  background: rgba(0, 20, 40, 0.85);
+  border: 2px solid #c8ff64;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(200, 255, 100, 0.4);
+}
+
+th, td {
+  padding: 16px;
+  text-align: center;
+  border: 1px solid rgba(200, 255, 100, 0.6);
+  font-size: 18px;
+}
+
+th {
+  background: rgba(50, 200, 100, 0.7);
+  color: #000;
+  font-weight: bold;
+}
+
+td {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+tr:hover td {
+  background: rgba(200, 255, 100, 0.2);
+}
+
+.codigo {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+</style>
 </head>
+
 <body>
-  <canvas id="fireflies"></canvas>
-  
-  <div class="container">
-    <h1>Panel de Anuncios - Rotación 100</h1>
-    
-    <div class="announcement-box">
-      <div id="editBtn" class="edit-btn">   Hola! con el Objetivo de evitar saturaciones por favor hagan sus pagos de 8 a 12, el resto de la tarde lo dejo para realizar pagos   Editar</div>
-      <p id="displayText">¡Bienvenido!</p>
-    </div>
-  </div>
 
-  <!-- Modal de edición -->
-  <div id="editModal" class="edit-modal">
-    <div class="edit-panel">
-      <h2>Editar Anuncio (Solo Administrador)</h2>
-      <input type="password" id="passwordInput" placeholder="Ingresa la contraseña">
-      <textarea id="textInput">¡Bienvenido! Aquí aparecerán tus anuncios y actualizaciones en vivo.</textarea>
-      <div class="buttons">
-        <button id="saveBtn">Guardar Cambios</button>
-        <button id="cancelBtn">Cancelar</button>
-      </div>
-    </div>
-  </div>
+<canvas id="fireflies"></canvas>
 
-  <script>
-    // Luciérnagas (efecto bonito de fondo)
-    const canvas = document.getElementById('fireflies');
-    const ctx = canvas.getContext('2d');
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-    const fireflies = [];
-    for (let i = 0; i < 100; i++) {
-      fireflies.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 3 + 1,
-        speedX: (Math.random() - 0.5) * 0.6,
-        speedY: (Math.random() - 0.5) * 0.6,
-        opacity: Math.random() * 0.5 + 0.5
-      });
-    }
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      fireflies.forEach(f => {
-        f.x += f.speedX;
-        f.y += f.speedY;
-        if (f.x < 0 || f.x > canvas.width) f.speedX *= -1;
-        if (f.y < 0 || f.y > canvas.height) f.speedY *= -1;
-        ctx.beginPath();
-        ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200, 255, 100, ${f.opacity})`;
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = '#c8ff64';
-        ctx.fill();
-      });
-      requestAnimationFrame(animate);
-    }
-    animate();
-    window.addEventListener('resize', () => {
-      canvas.width = innerWidth;
-      canvas.height = innerHeight;
-    });
+<h1>Panel de Anuncios - Rotación 100</h1>
+<div class="table-title">Próximos Pagos</div>
 
-    // Sistema de edición protegida
-    const PASSWORD = "admin2025"; // ← Cambia esta contraseña si quieres
-    const displayText = document.getElementById('displayText');
-    const textInput = document.getElementById('textInput');
-    const passwordInput = document.getElementById('passwordInput');
-    const editBtn = document.getElementById('editBtn');
-    const editModal = document.getElementById('editModal');
-    const saveBtn = document.getElementById('saveBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-
-    // Cargar texto guardado
-    const saved = localStorage.getItem('adminAnnouncement');
-    if (saved) {
-      displayText.innerHTML = saved.replace(/\n/g, '<br>');
-      editBtn.style.display = 'block';
-    }
-
-    // Abrir editor
-    editBtn.addEventListener('click', () => {
-      textInput.value = displayText.innerText;
-      editModal.classList.add('open');
-    });
-
-    // Guardar
-    saveBtn.addEventListener('click', () => {
-      if (passwordInput.value === PASSWORD) {
-        const newText = textInput.value.trim() || "Anuncio actualizado.";
-        displayText.innerHTML = newText.replace(/\n/g, '<br>');
-        localStorage.setItem('adminAnnouncement', newText);
-        editBtn.style.display = 'block';
-        editModal.classList.remove('open');
-        passwordInput.value = '';
-      } else {
-        alert("Contraseña incorrecta");
-      }
-    });
-
-    // Cancelar
-    cancelBtn.addEventListener('click', () => {
-      editModal.classList.remove('open');
-      passwordInput.value = '';
-    });
-
-    // Cerrar al hacer clic fuera
-    editModal.addEventListener('click', (e) => {
-      if (e.target === editModal) {
-        editModal.classList.remove('open');
-        passwordInput.value = '';
-      }
-    });
-  </script>
-</body>
-</html>
-
-
-
-  </div>
-
-  <!-- Modal con la tabla de bonos -->
-  <div class="modal" id="bonosModal">
-    <div class="modal-content">
-      <span class="close-modal" id="closeModal">×</span>
-      <h2>Entrega de los proximos bonos 4 de Enero 2026</h2>
-     <table>
+<table>
   <thead>
     <tr>
-      <th>Nombre</th>
-      <th>Monto</th>
+      <th>CÓDIGO</th>
+      <th>INV</th>
+      <th>BONO</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td>Meylin Norori</td><td>$600</td></tr>
-    <tr><td>Meylin Norori</td><td>$1000</td></tr>
-<tr><td>Indira Rubenia Calero Sandova</td><td>$700</td></tr>
-<tr><td>Julio Cesar Fernandez</td><td>$4000</td></tr>
-<tr><td>Juan Soza</td><td>$300</td></tr>
- <tr><td>WILFREDO NORORI</td><td>$400</td></tr>   
-     <tr><td>Jack Midkiff</td><td>$100</td></tr>
-    <tr><td>Nicole Pratt</td><td>$100</td></tr>
- 
-  
+    <tr><td class="codigo">A001</td><td>10-8</td><td>$100</td></tr>
+    <tr><td class="codigo">A002</td><td>20-5</td><td>$250</td></tr>
+    <tr><td class="codigo">A003</td><td>0</td><td>$50</td></tr>
+    <tr><td class="codigo">A004</td><td>30-20</td><td>$1000</td></tr>
+    <tr><td class="codigo">A005</td><td></td><td>$100</td></tr>
+    <tr><td class="codigo">A006</td><td>0</td><td>$50</td></tr>
+    <tr><td class="codigo">A007</td><td>0</td><td>$50</td></tr>
+    <tr><td class="codigo">A008</td><td>0</td><td>$50</td></tr>
+    <tr><td class="codigo">A009</td><td>0</td><td>$50</td></tr>
+    <tr><td class="codigo">A010</td><td>0</td><td>$50</td></tr>
   </tbody>
 </table>
-    </div>
-  </div>
 
-  <script>
-    // Luciérnagas
-    const canvas = document.getElementById('fireflies');
-    const ctx = canvas.getContext('2d');
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
+<script>
+/* FONDO ANIMADO */
+const canvas = document.getElementById('fireflies');
+const ctx = canvas.getContext('2d');
+canvas.width = innerWidth;
+canvas.height = innerHeight;
 
-    const fireflies = [];
-    const numFireflies = 120;
+const fireflies = Array.from({length:100}, () => ({
+  x: Math.random()*canvas.width,
+  y: Math.random()*canvas.height,
+  r: Math.random()*2+1,
+  vx:(Math.random()-0.5)*0.5,
+  vy:(Math.random()-0.5)*0.5
+}));
 
-    for (let i = 0; i < numFireflies; i++) {
-      fireflies.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 3 + 1,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5,
-        opacity: Math.random() * 0.5 + 0.5,
-        flickerSpeed: Math.random() * 0.05 + 0.02
-      });
-    }
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  fireflies.forEach(f=>{
+    f.x+=f.vx; 
+    f.y+=f.vy;
+    if(f.x<0||f.x>canvas.width)f.vx*=-1;
+    if(f.y<0||f.y>canvas.height)f.vy*=-1;
+    ctx.beginPath();
+    ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+    ctx.fillStyle='rgba(200,255,100,0.8)';
+    ctx.shadowBlur=15;
+    ctx.shadowColor='#c8ff64';
+    ctx.fill();
+  });
+  requestAnimationFrame(animate);
+}
+animate();
 
-    function drawFirefly(f) {
-      ctx.beginPath();
-      ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
-      const gradient = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size * 4);
-      gradient.addColorStop(0, `rgba(200, 255, 100, ${f.opacity})`);
-      gradient.addColorStop(0.5, `rgba(150, 255, 50, ${f.opacity * 0.6})`);
-      gradient.addColorStop(1, 'rgba(100, 200, 0, 0)');
-      ctx.fillStyle = gradient;
-      ctx.shadowBlur = 20;
-      ctx.shadowColor = '#c8ff64';
-      ctx.fill();
-    }
+window.addEventListener('resize', ()=>{
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+});
+</script>
 
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      fireflies.forEach(f => {
-        f.x += f.speedX;
-        f.y += f.speedY;
-        f.opacity += Math.sin(Date.now() * f.flickerSpeed) * 0.1;
-        if (f.opacity > 1) f.opacity = 1;
-        if (f.opacity < 0.3) f.opacity = 0.3;
-        if (f.x < 0 || f.x > canvas.width) f.speedX *= -1;
-        if (f.y < 0 || f.y > canvas.height) f.speedY *= -1;
-        drawFirefly(f);
-      });
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    window.addEventListener("resize", () => {
-      canvas.width = innerWidth;
-      canvas.height = innerHeight;
-    });
-
-    // Control del modal de bonos
-    const openModalBtn = document.getElementById('openModal');
-    const modal = document.getElementById('bonosModal');
-    const closeModalBtn = document.getElementById('closeModal');
-
-    openModalBtn.addEventListener('click', () => {
-      modal.classList.add('open');
-    });
-
-    closeModalBtn.addEventListener('click', () => {
-      modal.classList.remove('open');
-    });
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('open');
-      }
-    });
-  </script>
 </body>
-
 </html>
+
 
 
 
