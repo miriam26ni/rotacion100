@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discoteca Aleatoria 🪩</title>
+<title>Discoteca Automática 🪩</title>
 
 <style>
 body{
@@ -85,7 +85,7 @@ body{
 
 </div>
 
-<!-- Cargamos la IFrame API de YouTube -->
+<!-- YouTube IFrame API -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 let player;
@@ -97,19 +97,19 @@ const videos = [
 
 let current = -1;
 
-// Función para reproducir un video aleatorio
+// Función para reproducir video aleatorio
 function playRandom() {
     let next;
-    do{
+    do {
         next = Math.floor(Math.random() * videos.length);
-    } while(next === current);
+    } while (next === current);
     current = next;
     player.loadVideoById(videos[next]);
     document.getElementById("info").innerText =
       "Reproduciendo disco #" + (next + 1) + " 🔥";
 }
 
-// Esta función la llama la API de YouTube automáticamente
+// Se llama automáticamente al cargar la API
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         width: '100%',
@@ -124,9 +124,11 @@ function onYouTubeIframeAPIReady() {
             playsinline: 1
         },
         events: {
-            'onReady': () => playRandom(),
+            'onReady': () => {
+                // No hacemos nada hasta que el usuario pulse start
+            },
             'onStateChange': (event) => {
-                // Cuando termina el video
+                // Cuando termina el video → siguiente aleatorio
                 if(event.data === YT.PlayerState.ENDED){
                     playRandom();
                 }
@@ -135,14 +137,14 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
+// Botón de inicio
 document.getElementById("startBtn").onclick = function(){
     this.style.display = "none";
+    playRandom(); // Empieza la discoteca automáticamente
 };
 </script>
 </body>
 </html>
-
-
 
 
 
