@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discoteca Automática 🪩</title>
+<title>Discoteca DJ Automática 🪩</title>
 
 <style>
 body{
@@ -97,7 +97,7 @@ const videos = [
 
 let current = -1;
 
-// Función para reproducir video aleatorio
+// Reproduce un video aleatorio
 function playRandom() {
     let next;
     do {
@@ -109,7 +109,7 @@ function playRandom() {
       "Reproduciendo disco #" + (next + 1) + " 🔥";
 }
 
-// Se llama automáticamente al cargar la API
+// Llamada automática de la API
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         width: '100%',
@@ -119,16 +119,15 @@ function onYouTubeIframeAPIReady() {
             autoplay: 1,
             controls: 0,
             rel: 0,
-            mute: 1,
             modestbranding: 1,
             playsinline: 1
         },
         events: {
             'onReady': () => {
-                // No hacemos nada hasta que el usuario pulse start
+                // Esperamos a que el usuario haga click
             },
             'onStateChange': (event) => {
-                // Cuando termina el video → siguiente aleatorio
+                // Cuando termina el video, reproducimos otro aleatorio
                 if(event.data === YT.PlayerState.ENDED){
                     playRandom();
                 }
@@ -137,14 +136,16 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-// Botón de inicio
+// Botón de inicio activa sonido y comienza la discoteca
 document.getElementById("startBtn").onclick = function(){
     this.style.display = "none";
-    playRandom(); // Empieza la discoteca automáticamente
+    player.unMute(); // activamos sonido
+    playRandom();    // iniciamos playlist DJ
 };
 </script>
 </body>
 </html>
+
 
 
 
