@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discoteca DJ Automática - Nonstop Aleatoria 🪩</title>
+<title>Discoteca Multi-Género: Salsa, Merengue, Disco 🪩💃</title>
 <style>
 body { margin:0; background:#000; color:#ff0; font-family:Arial; text-align:center; overflow:hidden; height:100vh; }
 #container { position:relative; width:100vw; height:100vh; }
@@ -16,8 +16,8 @@ body { margin:0; background:#000; color:#ff0; font-family:Arial; text-align:cent
 </head>
 <body>
 <div id="container">
-    <div id="info">Pulsa para activar (muted al inicio) 💃🕺</div>
-    <button id="startBtn">¡Discoteca Nonstop Aleatoria! 🪩</button>
+    <div id="info">Pulsa para activar la discoteca multi-género (muted al inicio) 💃🕺</div>
+    <button id="startBtn">¡Fiesta Nonstop! 🪩</button>
     <div id="player"></div>
     <div class="disco"></div>
 </div>
@@ -25,51 +25,59 @@ body { margin:0; background:#000; color:#ff0; font-family:Arial; text-align:cent
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 let player;
-let playlist = [
-    "DLAfdt9oEIo",   // DISCO FUNK MIX NEW YEAR 2026
-    "5CAwxCmhdJI",   // Disco Remix Nonstop 2026
-    "O-TvkTLeC1c",   // DJ MIX 2026 Remixes Disco
-    "Bj-uFs4xbMk",   // Disco Club Remix 2026
-    "XeuwaA-KS8o",   // Funky House Nu Disco 2026
-    "YO8heLbUfjk",   // Disco & Club Remixes 2026
-    "gnQAgZHVyqs",   // Winter Disco Mix 2026
-    // Agrega más si quieres (busca "disco mix 2026 nonstop" y copia IDs)
-];
+const genres = {
+    salsa: [
+        "NOutb9E-S0E",   // Best New Year Salsa Mix 2026 Non-Stop
+        "wXJ6ehXF5Oo",   // Salsa Mix 2026 - Best of Salsa by MGTRACEY
+        "LadM7VQJfWY"    // Best Latin Salsa Mix with Vocals 2026
+    ],
+    merengue: [
+        "YPZBToy5BK8",   // Merengue Mix 2025 – The Best Latin Dance Hits Nonstop
+        "cYLQbe6kOSs",   // Merengue Clásico & Bailable 2026 – Juan Luis Guerra, Olga Tañón
+        "ff8vFN4S5N8"    // MIX AÑO NUEVO 2026 (incluye merengue y más)
+    ],
+    disco: [
+        "DLAfdt9oEIo",   // DISCO FUNK MIX NEW YEAR 2026 by Jeny Preston
+        "5CAwxCmhdJI",   // DJ Mix 2026 – Disco Remix Nonstop New Songs
+        "YO8heLbUfjk"    // DJ SONG 2026 – Disco & Club Remixes
+    ]
+};
 
+let currentGenre = null;
 let currentIndex = -1;
 let checkInterval = null;
 
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+function getRandomGenre() {
+    const keys = Object.keys(genres);
+    return keys[Math.floor(Math.random() * keys.length)];
 }
 
 function playNext() {
-    if (currentIndex === -1 || currentIndex >= playlist.length - 1) {
-        shuffle(playlist);
-        currentIndex = 0;
-    } else {
-        currentIndex++;
+    if (!currentGenre || Math.random() < 0.3) {  // ~30% chance de cambiar género para variedad
+        currentGenre = getRandomGenre();
+        currentIndex = -1;
+        document.getElementById("info").innerText = `¡Cambiando a ${currentGenre.toUpperCase()}! 🔥`;
     }
 
-    const id = playlist[currentIndex];
-    player.loadVideoById(id);
-    document.getElementById("info").innerText = `Reproduciendo mix aleatorio #${currentIndex + 1} 🔥 (nonstop)`;
+    const list = genres[currentGenre];
+    currentIndex = (currentIndex + 1) % list.length;  // Cicla dentro del género
 
-    // Limpia intervalo anterior y empieza chequeo de fin
+    const id = list[currentIndex];
+    player.loadVideoById(id);
+    document.getElementById("info").innerText = `${currentGenre.toUpperCase()} nonstop mix #${currentIndex + 1} 🕺`;
+
+    // Limpia y reinicia chequeo de fin (para mixes largos)
     if (checkInterval) clearInterval(checkInterval);
     checkInterval = setInterval(() => {
         if (player && player.getCurrentTime && player.getDuration) {
-            const current = player.getCurrentTime();
-            const duration = player.getDuration();
-            if (duration > 0 && current >= duration - 5) {  // -5 seg para margen (buffering)
+            const curr = player.getCurrentTime();
+            const dur = player.getDuration();
+            if (dur > 60 && curr >= dur - 10) {  // Margen de 10 seg
                 clearInterval(checkInterval);
-                setTimeout(playNext, 3000);  // Pausa de 3 seg + siguiente
+                setTimeout(playNext, 4000);  // Pausa + siguiente
             }
         }
-    }, 5000);  // Chequea cada 5 segundos
+    }, 8000);
 }
 
 function onYouTubeIframeAPIReady() {
@@ -79,7 +87,7 @@ function onYouTubeIframeAPIReady() {
         videoId: '',
         playerVars: {
             autoplay: 1,
-            mute: 1,  // Obligatorio para autoplay confiable
+            mute: 1,
             controls: 1,
             rel: 0,
             modestbranding: 1,
@@ -90,11 +98,11 @@ function onYouTubeIframeAPIReady() {
             'onStateChange': (event) => {
                 if (event.data === YT.PlayerState.ENDED) {
                     clearInterval(checkInterval);
-                    setTimeout(playNext, 2000);
+                    setTimeout(playNext, 3000);
                 }
             },
             'onError': () => {
-                setTimeout(playNext, 5000);  // Salta si error (embedding bloqueado)
+                setTimeout(playNext, 6000);  // Salta si embedding falla
             }
         }
     });
@@ -102,12 +110,13 @@ function onYouTubeIframeAPIReady() {
 
 document.getElementById("startBtn").onclick = function(){
     this.style.display = "none";
-    player.unMute();  // Sonido tras interacción
-    playNext();       // Inicia aleatorio
+    player.unMute();
+    playNext();  // Inicia con género aleatorio
 };
 </script>
 </body>
 </html>
+
 
 
 
