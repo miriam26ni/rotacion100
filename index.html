@@ -1,63 +1,130 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disco Aleatoria - Fix 2026</title>
-    <style>
-        body { background:#000; color:#ff0; margin:0; font-family:Arial; text-align:center; height:100vh; overflow:hidden; }
-        #container { position:relative; width:100vw; height:100vh; }
-        #player { position:absolute; top:0; left:0; width:100%; height:100%; }
-        #startBtn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:100; padding:20px 40px; font-size:2rem; background:#f0f; color:#000; border:none; border-radius:50px; cursor:pointer; box-shadow:0 0 30px #f0f; }
-        #info { position:absolute; top:20px; left:50%; transform:translateX(-50%); z-index:10; font-size:1.8rem; text-shadow:0 0 10px #000; }
-        .disco { position:absolute; top:50%; left:50%; width:280px; height:280px; background:conic-gradient(#f00,#ff0,#0f0,#00f,#f0f,#f00); border-radius:50%; animation:spin 7s linear infinite; opacity:0.35; transform:translate(-50%,-50%); pointer-events:none; }
-        @keyframes spin { to { transform:translate(-50%,-50%) rotate(360deg); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discoteca Aleatoria 🪩</title>
+
+<style>
+body{
+    margin:0;
+    background:#000;
+    color:#ff0;
+    font-family:Arial, Helvetica, sans-serif;
+    text-align:center;
+    overflow:hidden;
+}
+
+#container{
+    position:relative;
+    width:100vw;
+    height:100vh;
+}
+
+#player{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    border:none;
+}
+
+#startBtn{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:100;
+    padding:20px 40px;
+    font-size:2rem;
+    background:#f0f;
+    color:#000;
+    border:none;
+    border-radius:50px;
+    cursor:pointer;
+    box-shadow:0 0 30px #f0f;
+}
+
+#info{
+    position:absolute;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:50;
+    font-size:1.6rem;
+    text-shadow:0 0 10px #000;
+}
+
+.disco{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:300px;
+    height:300px;
+    background:conic-gradient(#f00,#ff0,#0f0,#00f,#f0f,#f00);
+    border-radius:50%;
+    animation:spin 6s linear infinite;
+    opacity:0.35;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+}
+
+@keyframes spin{
+    to{ transform:translate(-50%,-50%) rotate(360deg); }
+}
+</style>
 </head>
+
 <body>
-    <div id="container">
-        <div id="player"></div>
-        <button id="startBtn">¡Empezar Discoteca! 🪩</button>
-        <div id="info">Pulsa para activar modo disco 💃🕺</div>
-        <div class="disco"></div>
-    </div>
+<div id="container">
 
-    <script>
-        const videos = ['I_izvAbhExY','Td0b-sB0xKE','wcgoWSg8ga8','3GwjfUFyY6M','5XhRdcjvKWA','Ar71PaXq74k','ZgPpsiR7sXg','lEXY6gP7eLs','pYeNaad2NKI','_Vu6N5wdTKk'];
+    <div id="info">Pulsa para activar la discoteca 💃🕺</div>
+    <button id="startBtn">¡Empezar Discoteca! 🪩</button>
 
-        let current = -1;
-        const iframe = document.createElement('iframe');
-        iframe.id = 'player';
-        iframe.width = '100%';
-        iframe.height = '100%';
-        iframe.frameBorder = '0';
-        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-        iframe.allowFullscreen = true;
+    <div class="disco"></div>
 
-        function loadRandom() {
-            let next;
-            do { next = Math.floor(Math.random() * videos.length); } while (next === current);
-            current = next;
-            const id = videos[next];
-            iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&rel=0&playsinline=1&enablejsapi=1&origin=${location.origin}`;
-            document.getElementById('info').innerText = `Reproduciendo: Disco #${next+1} 🔥`;
-        }
+</div>
 
-        document.getElementById('startBtn').onclick = function() {
-            this.style.display = 'none';
-            document.getElementById('container').appendChild(iframe);
-            loadRandom();
+<script>
+const videos = [
+  "I_izvAbhExY", "Td0b-sB0xKE", "wcgoWSg8ga8", "3GwjfUFyY6M",
+  "5XhRdcjvKWA", "Ar71PaXq74k", "ZgPpsiR7sXg",
+  "lEXY6gP7eLs", "pYeNaad2NKI", "_Vu6N5wdTKk"
+];
 
-            // Si termina o error → siguiente
-            const check = setInterval(() => {
-                if (!iframe.src || iframe.src.includes('error')) {
-                    loadRandom();
-                }
-            }, 5000);
+let current = -1;
 
-            iframe.onload = () => setTimeout(() => { if (iframe.contentWindow) loadRandom(); }, 10000);
-        };
-    </script>
+const iframe = document.createElement("iframe");
+iframe.id = "player";
+iframe.allow =
+  "autoplay; encrypted-media; picture-in-picture";
+iframe.allowFullscreen = true;
+
+function playRandom(){
+    let next;
+    do{
+        next = Math.floor(Math.random() * videos.length);
+    } while(next === current);
+
+    current = next;
+
+    iframe.src =
+      "https://www.youtube.com/embed/" +
+      videos[next] +
+      "?autoplay=1&mute=1&rel=0&playsinline=1";
+    
+    document.getElementById("info").innerText =
+      "Reproduciendo disco #" + (next + 1) + " 🔥";
+}
+
+document.getElementById("startBtn").onclick = function(){
+    this.style.display = "none";
+    document.getElementById("container").appendChild(iframe);
+    playRandom();
+};
+</script>
+
 </body>
 </html>
 
