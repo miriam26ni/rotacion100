@@ -27,7 +27,6 @@ body{
     left:0;
     width:100%;
     height:100%;
-    border:none;
 }
 
 #startBtn{
@@ -81,12 +80,15 @@ body{
 
     <div id="info">Pulsa para activar la discoteca 💃🕺</div>
     <button id="startBtn">¡Empezar Discoteca! 🪩</button>
-
+    <div id="player"></div>
     <div class="disco"></div>
 
 </div>
 
+<!-- Cargamos la IFrame API de YouTube -->
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
+let player;
 const videos = [
   "I_izvAbhExY", "Td0b-sB0xKE", "wcgoWSg8ga8", "3GwjfUFyY6M",
   "5XhRdcjvKWA", "Ar71PaXq74k", "ZgPpsiR7sXg",
@@ -95,39 +97,50 @@ const videos = [
 
 let current = -1;
 
-const iframe = document.createElement("iframe");
-iframe.id = "player";
-iframe.allow =
-  "autoplay; encrypted-media; picture-in-picture";
-iframe.allowFullscreen = true;
-
-function playRandom(){
+// Función para reproducir un video aleatorio
+function playRandom() {
     let next;
     do{
         next = Math.floor(Math.random() * videos.length);
     } while(next === current);
-
     current = next;
-
-    iframe.src =
-      "https://www.youtube.com/embed/" +
-      videos[next] +
-      "?autoplay=1&mute=1&rel=0&playsinline=1";
-    
+    player.loadVideoById(videos[next]);
     document.getElementById("info").innerText =
       "Reproduciendo disco #" + (next + 1) + " 🔥";
 }
 
+// Esta función la llama la API de YouTube automáticamente
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        width: '100%',
+        height: '100%',
+        videoId: '', // vacío al inicio
+        playerVars: {
+            autoplay: 1,
+            controls: 0,
+            rel: 0,
+            mute: 1,
+            modestbranding: 1,
+            playsinline: 1
+        },
+        events: {
+            'onReady': () => playRandom(),
+            'onStateChange': (event) => {
+                // Cuando termina el video
+                if(event.data === YT.PlayerState.ENDED){
+                    playRandom();
+                }
+            }
+        }
+    });
+}
+
 document.getElementById("startBtn").onclick = function(){
     this.style.display = "none";
-    document.getElementById("container").appendChild(iframe);
-    playRandom();
 };
 </script>
-
 </body>
 </html>
-
 
 
 
